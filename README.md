@@ -7,3 +7,4 @@ Based on Marco Mornati Ruby script
 Dependencies :
 - sox 
 - sudo apt-get install sox
+- sudo apt-get install lame libmp3lame0
