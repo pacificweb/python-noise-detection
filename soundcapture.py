@@ -9,23 +9,29 @@ import time
 
 def main(args=None):
 
+    #todo offset,root via param
+    root = "/mnt/flash/capture/"
+    offset = 0.15 # user defined
+
     try:
         while True:
-            filename = time.strftime("%Y%m%d%H%M%S") + ".wav"
-            proc = subprocess.Popen(['sh','sox.sh', filename, '5' ], stdout=subprocess.PIPE)
+            filedate = time.strftime("%Y%m%d-%H%M%S")
+            filename = root + filedate + ".wav"
+            #if not root current then uncomment
+            #filename = filedate + ".wav"
+            proc = subprocess.Popen(['/bin/bash','sox.sh', filename, '5' ], stdout=subprocess.PIPE)
             result,errors = proc.communicate()
-            amplitude=float(result)
+            amplitude = float(result)
             print amplitude
-            if amplitude > 0.15:
-                print 'Sound detected'
-                #os.rename(filename, "data/" + filename)
+            if amplitude >= offset:
+                print 'Sound detected - amplitude was ' + str(amplitude)
             else:
-                print 'No sound detected'
-                #os.remove(filename)
+                os.remove(filename)
+    #todo other except handler
     except KeyboardInterrupt:
         print('')
     finally:
-        print('Program over')
+        print('')
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]) or 0)
